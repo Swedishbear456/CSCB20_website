@@ -132,7 +132,7 @@ h1 {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #000000;
+    background-color: var(--sidebar-bg-color);
     color:#000000;
     min-width: 160px;
     z-index: 1; /*This z value is the direction out of computer, making it 1 means its closer to us so it wont get covered by anything*/
