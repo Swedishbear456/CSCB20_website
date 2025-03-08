@@ -116,6 +116,8 @@ h1 {
 
 /* Footer */
 .footer {
+    position: sticky;
+    max-height: 1hv;
     grid-column: span 2; /* Take up the two columns, not just 1 */
     background-color: var(--footer-bg-color);
     color: #ffffff;
