@@ -1,90 +1,242 @@
-/* This is what the website will defult to if no other style is giving */
+/* This is the styles root is defult and darkmode is darkmode*/
+
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --link-color: #0859aa;
+    --sidebar-bg-color: #ffffff;
+    --sidebar-link-color: #333333;
+    --sidebar-link-hover-bg: #0859aa;
+    --header-bg-color: #0859aa;
+    --footer-bg-color: #0859aa;
+    --content-bg-color: #ffffff;
+}
+
+.dark-mode-toggle:checked ~ .theme-wrapper {
+    --background-color: #000000;
+    --text-color: #ffffff;
+    --link-color: #ffffff;
+    --sidebar-bg-color: #000000;
+    --sidebar-link-color: #ffffff;
+    --sidebar-link-hover-bg: #002850;
+    --header-bg-color: #002850;
+    --footer-bg-color: #002850;
+    --content-bg-color: #000000;
+}
+
+/*I need this becasue I dont want any margin on the sides that dont get effected by change in background color*/
+* {
+    margin: 0;
+}
+
+
+/* This is what the website will default to if no other style is giving */
 body {
-    font-family:Arial, Helvetica, sans-serif;
-    background-color: #f5f5f5;
-    color: #000000;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--background-color); 
+    color: var(--text-color); 
+}
+
+a {
+    color:#000000;
 }
 
 /* Container Setup */
 .container {
     display: grid;
     grid-template-areas: 
-        "header header"/* header is the enitre width but the sidebar and content share width */
+        "header header" /* header is the entire width but the sidebar and content share width */
         "sidebar content";
     grid-template-columns: auto 1fr;  
     grid-template-rows: auto 1fr auto;
-    min-height: 100vh; /* vh=viewpoint hight, this is saying make sure this container the enire height of your screen */
+    min-height: 100vh; /* vh=viewpoint height, this is saying make sure this container is the entire height of your screen */
     min-width: 100vh;
 }
 
-/* Header Styling */
+/* Header */
 .header {
     grid-area: header; /* Make header span across the whole grid */
     display: grid;
     grid-template-columns: auto 1fr; /* Two columns for logo title */
     align-items: center;
-    background-color: #0859aa;
-    color: #fff;
+    background-color: var(--header-bg-color);
+    color: #ffffff;
     width: 100%; /* Ensure it takes up full width */
-    position: sticky;/* This is telling the header to be sticky to the top, samething will be done with sidebar */
+    position: sticky; /* This is telling the header to be sticky to the top, same thing will be done with sidebar */
     top: 0px;
-   
 }
 
+/* Logo */
 .logo {
     grid-column: 1; /* Align logo in the first column */
 }
 
 .logo img {
-    height: auto;
+    max-height: 100px;
     width: auto;
 }
 
 h1 {
-    grid-column: 2; /* Align title in the second column */
-    text-align: center; /* Center align the title */
+    grid-column: 2; 
+    text-align: center; 
 }
 
-/* Sidebar Styling */
+/* Sidebar */
 .sidebar {
     grid-area: sidebar;
-    background-color: #f0f0f0;
+    background-color: var(--sidebar-bg-color);
     padding: 20px;
-    position:static;
+    position: static;
     top: 100px;
 }
 
 .sidebar ul {
-    list-style: none;
+    list-style: none; /* We don't want any bullet points */
 }
 
-.sidebar a {
+/* Links for Sidebar */
+.sidebar a {           
     text-decoration: none;
-    color: #333;
+    color: var(--sidebar-link-color);
     display: block;
     padding: 10px 0;
 }
 
 .sidebar a:hover {
-    background-color: #0859aa;
-    color: #fff;
+    background-color: var(--sidebar-link-hover-bg);
+    color: #ffffff;
 }
 
-/* Content Styling */
+/* Content */
 .content {
-    grid-area: content;
+    background-color: var(--background-color); 
+    color: var(--text-color); 
     padding: 20px;
 }
 
-/* Footer Styling */
+/* Footer */
 .footer {
-    grid-column: span 2;
-    background-color: #0859aa;
-    color: #fff;
+    grid-column: span 2; /* Take up the two columns, not just 1 */
+    background-color: var(--footer-bg-color);
+    color: #ffffff;
     text-align: center;
     padding: 20px;
 }
 
-a {
-    color: #ffffff; /* This is just for the links, i want them white still */
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+/* Hide the dropdown menu by default */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #000000;
+    color:#000000;
+    min-width: 160px;
+    z-index: 1; /*This z value is the direction out of computer, making it 1 means its closer to us so it wont get covered by anything*/
+    max-height: 300px; 
+    overflow-y: auto; /*This is the scroll bar when things cant fit in the assigned space*/
+}
+
+/* Show the dropdown menu when hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* This is for mobile, we dont have a cursor on mobile so must click */
+@media (max-width: 750px) {
+    .dropdown {
+        position: static; 
+    }
+
+    /* Make dropdown menu display when clicked on mobile */
+    .dropdown-content {
+        display: none;
+    }
+
+    .dropdown.active .dropdown-content {
+        display: block;
+    }
+
+    /* Custom style for the dropdown trigger on mobile */
+    .dropdown > a {
+        cursor: pointer;
+    }
+}
+
+/* Calendar, I understand tables not allowed but thats for organizing website,
+this table is actaully a table so its ok I think */
+.calendar {
+    padding: 20px;
+}
+
+.calendar-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.calendar-table th, .calendar-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ffffff;
+    width: 14.28%;
+}
+
+.calendar-table th {
+    background-color: var(--header-bg-color);
+    color: #ffffff;
+}
+
+.calendar-table td {
+    background-color: var(--background-color);
+}
+
+.calendar-table td:hover {
+    background-color: var(--header-bg-color);
+    color: #ffffff;
+}
+
+/* Dark Mode Label  */
+.dark-mode-label {
+    position: static;
+    color: #0859aa;
+    top:0px;
+    right:0px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    z-index: 1;
+}
+
+.dark-mode-label input[type="checkbox"] {
+    margin-right: 10px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #ddd;
+    border-radius: 4px;
+}
+
+
+form {
+    max-width: 480px;
+    padding: 20px;
+}
+
+input[type="text"],
+textarea {
+    background-color: #ffffff;
+    border: 1px solid #0859aa;
+    font-size: 16px;
+    height: auto;
+    padding: 8px 18px;
+    height: 48px;
+    width: 100%;
+    color: #8a97a0;
+    margin-bottom: 16px;
 }
