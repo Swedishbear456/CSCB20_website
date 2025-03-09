@@ -64,6 +64,7 @@ a {
     width: 100%; /* Ensure it takes up full width */
     position: sticky; /* This is telling the header to be sticky to the top, same thing will be done with sidebar */
     top: 0px;
+    z-index: 1000;
 }
 
 /* Logo */
@@ -111,7 +112,7 @@ h1 {
 .content {
     background-color: var(--background-color); 
     color: var(--text-color); 
-    padding: 20px;
+    padding: 40px;
 }
 
 /* Footer */
@@ -171,7 +172,7 @@ h1 {
 /* Calendar, I understand tables not allowed but thats for organizing website,
 this table is actaully a table so its ok I think */
 .calendar {
-    padding: 20px;
+    padding-top: 20px;
 }
 
 .calendar-table {
@@ -227,7 +228,7 @@ this table is actaully a table so its ok I think */
 
 form {
     max-width: 480px;
-    padding: 20px;
+    padding-top: 20px;
 }
 
 input[type="text"],
@@ -241,4 +242,11 @@ textarea {
     width: 100%;
     color: #8a97a0;
     margin-bottom: 16px;
+}
+
+.list {
+    margin-top:30px;
+    list-style: none;
+    
+    
 }
