@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CSCB20 Course Website{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/CSCB.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</head>
+
+<!--header and darkmoder-->
+<body>
+    <input type="checkbox" id="dark-mode-toggle" class="dark-mode-toggle">
+    <label for="dark-mode-toggle" class="dark-mode-label">Dark Mode</label>
+    
+    <div class="theme-wrapper">
+        <div class="container">
+            <header class="header">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='Src/uoft_logo.png') }}" alt="uoft logo">
+                </div>
+                <h1>CSCB20 COURSE WEBSITE</h1>
+            </header>
+           
+           
+            <!--dropdown links on the right-->
+            <nav class="sidebar">
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('static', filename='src/CSCB20 Winter 2025 Syllabus-1.pdf') }}" target="_blank">Syllabus</a></li>
+                    <li><a href="{{ url_for('grades') }}">Grades</a></li>
+                    {% if current_user.is_authenticated and current_user.role == 'instructor' %}
+                        <li><a href="{{ url_for('enter_marks') }}">Enter Marks</a></li>
+                    {% endif %}
+                    <li class="dropdown">
+                        <a href="#">Assignments</a>
+                        <ul class="dropdown-content">
+                            <li><a href="{{ url_for('static', filename='src/ASSIGNMENT.pdf') }}" target="_blank">Assignment 1</a></li>
+                            <li><a href="{{ url_for('static', filename='src/ASSIGNMENT.pdf') }}" target="_blank">Assignment 2</a></li>
+                            <li><a href="{{ url_for('static', filename='src/ASSIGNMENT.pdf') }}" target="_blank">Assignment 3</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Labs</a>
+                        <ul class="dropdown-content">
+                            {% for i in range(12) %}
+                                <li><a href="{{ url_for('static', filename='src/Labs.pdf') }}" target="_blank">week{{ i }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#">Lecture Notes</a>
+                        <ul class="dropdown-content">
+                            {% for i in range(12) %}
+                                <li><a href="{{ url_for('static', filename='src/Lectures.pdf') }}" target="_blank">week{{ i }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li><a href="https://piazza.com/class/m5fmz9kzjo83yk" target="_blank">Piazza</a></li>
+                    <li><a href="https://markus2.utsc.utoronto.ca/" target="_blank">Markus</a></li>
+                    <li><a href="{{ url_for('static', filename='src/Course_team.pdf') }}" target="_blank">Course Team</a></li>
+                   
+                    {% if current_user.is_authenticated and current_user.role == 'student' %}
+                        <li><a href="{{ url_for('feedback') }}">Submit Feedback</a></li>
+                    {% endif %}
+
+                    {% if current_user.is_authenticated and current_user.role == 'instructor' %}
+                        <li><a href="{{ url_for('view_feedback') }}">View Feedback</a></li>
+                    {% endif %}
+
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('login') }}">Login</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            
+            <!---the displaying temporary notification messages-->
+            <main class="content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                {% block content %}
+                {% endblock %}
+            </main>
+            
+            <!--same footer code from A2-->
+            <footer class="footer">
+                <p>This Website was made by Bishop, Farryl and Abhishek</p>
+                <a href="https://web.cs.toronto.edu/" target="_blank"> Faculty of Computer Science at UofT </a>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+
+{% extends "template.html" %}
+
+{% block content %}
+<div class="feedback-view-container">
+    <h2>Your Feedback</h2>
+    
+    {% if not feedback_list %}
+        <p>No feedback has been submitted for you yet.</p>
+    {% else %}
+        <div class="feedback-filter">
+            <a href="{{ url_for('view_feedback') }}?filter=all" class="filter-btn {% if filter_type == 'all' %}active{% endif %}">All</a>
+            <a href="{{ url_for('view_feedback') }}?filter=unreviewed" class="filter-btn {% if filter_type == 'unreviewed' %}active{% endif %}">Unreviewed</a>
+            <a href="{{ url_for('view_feedback') }}?filter=reviewed" class="filter-btn {% if filter_type == 'reviewed' %}active{% endif %}">Reviewed</a>
+        </div>
+        
+        {% for feedback in feedback_list %}
+        <div class="feedback-item {% if feedback.reviewed %}reviewed{% else %}unreviewed{% endif %}">
+            <div class="feedback-header">
+                <span class="feedback-status">
+                    {% if feedback.reviewed %}
+                        <span class="status-badge reviewed">Reviewed</span>
+                    {% else %}
+                        <span class="status-badge unreviewed">Unreviewed</span>
+                    {% endif %}
+                </span>
+            </div>
+            
+            <div class="feedback-section">
+                <h4>What students like about your teaching:</h4>
+                <p>{{ feedback.likes_teaching }}</p>
+            </div>
+            
+            <div class="feedback-section">
+                <h4>Suggestions for improvement:</h4>
+                <p>{{ feedback.improve_teaching }}</p>
+            </div>
+            
+            <div class="feedback-section">
+                <h4>What students like about the labs:</h4>
+                <p>{{ feedback.likes_labs }}</p>
+            </div>
+            
+            <div class="feedback-section">
+                <h4>Suggestions for lab improvement:</h4>
+                <p>{{ feedback.improve_labs }}</p>
+            </div>
+            
+            {% if not feedback.reviewed %}
+            <form method="POST" action="{{ url_for('view_feedback') }}" class="feedback-actions">
+                <input type="hidden" name="feedback_id" value="{{ feedback.id }}">
+                <button type="submit" name="action" value="mark_reviewed" class="mark-reviewed-btn">
+                    Mark as Reviewed
+                </button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div class="grades-container">
+    {% if current_user.role == 'student' %}
+        <h2>Welcome, {{ current_user.firstn }}</h2>
+        
+        {% if student_grades %} 
+        <!--Tables like this I think are allowed. Its actually being used as a table and not organize
+        but could swap out with flexbox like the calander but this is not needed in my opinion-->
+            <table class="grade-table">
+                <thead>
+                    <tr>
+                        <th>Assessment</th>
+                        <th>Grade</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set assessments = [
+                        ('assignment1', 'Assignment 1'),
+                        ('assignment2', 'Assignment 2'), 
+                        ('assignment3', 'Assignment 3'),
+                        ('midterm', 'Midterm'),
+                        ('lab', 'Lab'),
+                        ('final_exam', 'Final Exam')
+                    ] %}
+                    
+                    {% for field, name in assessments %}
+                    <tr>
+                        <td>{{ name }}</td>
+                        <td>{{ student_grades[field] }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('submit_remark_request') }}" style="display: inline;">
+                                <input type="hidden" name="grade_id" value="{{ student_grades.id }}">
+                                <input type="hidden" name="assessment_type" value="{{ field }}">
+                                <textarea name="reason" placeholder="Reason for remark" required style="display: block; margin-bottom: 5px;"></textarea>
+                                <button type="submit" class="remark-btn">Request Remark</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h3>Your Remark Requests</h3>
+            {% if remark_requests %}
+            <table class="remark-requests-table">
+                <thead>
+                    <tr>
+                        <th>Assessment</th>
+                        <th>Reason</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in remark_requests %}
+                    <tr>
+                        <td>
+                            {% if request.assessment_type %}
+                                {{ request.assessment_type.replace('_', ' ')|title }}
+                            {% else %}
+                                Unknown Assessment
+                            {% endif %}
+                        </td>
+                        <td>{{ request.reason }}</td>
+                        <td class="status-{{ request.status.lower() if request.status else 'pending' }}">
+                            {{ request.status if request.status else 'Pending' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>No remark requests submitted yet.</p>
+            {% endif %}
+
+        {% else %}
+            <p>No grades available yet.</p>
+        {% endif %}
+
+    {% elif current_user.role == 'instructor' %}
+        <h2>Welcome, Instructor {{ current_user.firstn }}</h2>
+        <table class="grade-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Assignment 1</th>
+                    <th>Assignment 2</th>
+                    <th>Assignment 3</th>
+                    <th>Midterm</th>
+                    <th>Lab</th>
+                    <th>Final Exam</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for grade in all_grades %}
+                <tr>
+                    <td>{{ grade.student.username if grade.student else 'Unknown Student' }}</td>
+                    <td>{{ grade.assignment1 }}</td>
+                    <td>{{ grade.assignment2 }}</td>
+                    <td>{{ grade.assignment3 }}</td>
+                    <td>{{ grade.midterm }}</td>
+                    <td>{{ grade.lab }}</td>
+                    <td>{{ grade.final_exam }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Remark Requests</h3>
+        {% if remark_requests %}
+        <table class="remark-requests-table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Assessment</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for request in remark_requests %}
+                <tr>
+                    <td>{{ request.student.username if request.student else 'Unknown Student' }}</td>
+                    <td>
+                        {% if request.assessment_type %}
+                            {{ request.assessment_type.replace('_', ' ')|title }}
+                        {% else %}
+                            Unknown Assessment
+                        {% endif %}
+                    </td>
+                    <td>{{ request.reason }}</td>
+                    <td class="status-{{ request.status.lower() if request.status else 'pending' }}">
+                        {{ request.status if request.status else 'Pending' }}
+                    </td>
+                    <td>
+                        {% if not request.status or request.status == 'Pending' %}
+                        <a href="{{ url_for('update_remark_status', request_id=request.id, status='Approved') }}" class="approve-btn">Approve</a>
+                        <a href="{{ url_for('update_remark_status', request_id=request.id, status='Rejected') }}" class="reject-btn">Reject</a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No remark requests to review.</p>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

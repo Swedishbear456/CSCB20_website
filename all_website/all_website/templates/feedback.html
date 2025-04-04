@@ -1,0 +1,43 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div class="feedback-container">
+    <h2>Anonymous Feedback Form</h2>
+    <p>Your feedback is anonymous and will help improve the course.</p>
+    
+    <form method="POST" action="{{ url_for('feedback') }}">
+        <div class="form-group">
+            <label for="instructor_id">Select Instructor:</label>
+            <select class="form-control" id="instructor_id" name="instructor_id" required>
+                <option value="" disabled selected>Choose an instructor</option>
+                {% for instructor in instructors %}
+                    <option value="{{ instructor.id }}">{{ instructor.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="likes_teaching">What do you like about the instructor's teaching?</label>
+            <textarea class="form-control" id="likes_teaching" name="likes_teaching" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="improve_teaching">What do you recommend the instructor to do to improve their teaching?</label>
+            <textarea class="form-control" id="improve_teaching" name="improve_teaching" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="likes_labs">What do you like about the labs?</label>
+            <textarea class="form-control" id="likes_labs" name="likes_labs" rows="3" required></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="improve_labs">What do you recommend the lab instructors to do to improve their lab teaching?</label>
+            <textarea class="form-control" id="improve_labs" name="improve_labs" rows="3" required></textarea>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit Feedback</button>
+    </form>
+</div>
+
+{% endblock %}

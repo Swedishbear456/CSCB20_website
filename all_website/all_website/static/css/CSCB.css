@@ -1,0 +1,397 @@
+/* This is the styles root is defult and darkmode is darkmode*/
+/* (not much has changed from A2)*/
+:root {
+    --background-color: #ffffff;
+    --text-color: #000000;
+    --link-color: #0859aa;
+    --sidebar-bg-color: #ffffff;
+    --sidebar-link-color: #333333;
+    --sidebar-link-hover-bg: #0859aa;
+    --header-bg-color: #0859aa;
+    --footer-bg-color: #0859aa;
+    --content-bg-color: #ffffff;
+}
+
+.dark-mode-toggle:checked ~ .theme-wrapper {
+    --background-color: #1a1717;
+    --text-color: #ffffff;
+    --link-color: #ffffff;
+    --sidebar-bg-color: #1a1717;
+    --sidebar-link-color: #ffffff;
+    --sidebar-link-hover-bg: #002850;
+    --header-bg-color: #002850;
+    --footer-bg-color: #002850;
+    --content-bg-color: #000000;
+}
+
+/*I need this becasue I dont want any margin on the sides that dont get effected by change in background color*/
+* {
+    margin: 0;
+}
+
+
+/* This is what the website will default to if no other style is giving */
+body {
+    font-family: Garamond;
+    background-color: var(--background-color); 
+    color: var(--text-color); 
+}
+
+a {
+    color:#2eb8f3;
+}
+
+/* Container Setup */
+.container {
+    display: grid;
+    grid-template-areas: 
+        "header header" /* header is the entire width but the sidebar and content share width */
+        "sidebar content";
+    grid-template-columns: auto 1fr;  
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh; /* vh=viewpoint height, this is saying make sure this container is the entire height of your screen */
+    min-width: 100vw;
+}
+
+/* Header */
+.header {
+    grid-area: header; /* Make header span across the whole grid */
+    display: grid;
+    grid-template-columns: auto 1fr; /* Two columns for logo title */
+    align-items: center;
+    background-color: var(--header-bg-color);
+    color: #ffffff;
+    width: 100%; /* Ensure it takes up full width */
+    position: sticky; /* This is telling the header to be sticky to the top, same thing will be done with sidebar */
+    top: 0px;
+    z-index: 1000;
+}
+
+/* Logo */
+.logo {
+    grid-column: 1; /* Align logo in the first column */
+}
+
+.logo img {
+    max-height: 100px;
+    width: auto;
+}
+
+h1 {
+    grid-column: 2; 
+    text-align: center; 
+}
+
+/* Sidebar */
+.sidebar {
+    grid-area: sidebar;
+    background-color: var(--sidebar-bg-color);
+    padding: 20px;
+    position: static;
+    top: 100px;
+}
+
+.sidebar ul {
+    list-style: none; /* We don't want any bullet points */
+}
+
+/* Links for Sidebar */
+.sidebar a {           
+    text-decoration: none;
+    color: var(--sidebar-link-color);
+    display: block;
+    padding: 10px 0;
+}
+
+.sidebar a:hover {
+    background-color: var(--sidebar-link-hover-bg);
+    color: #ffffff;
+}
+
+/* Content */
+.content {
+    background-color: var(--background-color); 
+    color: var(--text-color); 
+    padding: 40px;
+}
+
+/* Footer */
+.footer {
+    position: sticky;
+    max-height: 1hv;
+    grid-column: span 2; /* Take up the two columns, not just 1 */
+    background-color: var(--footer-bg-color);
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+/* Hide the dropdown menu by default */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--sidebar-bg-color);
+    color:#000000;
+    min-width: 160px;
+    z-index: 1; /*This z value is the direction out of computer, making it 1 means its closer to us so it wont get covered by anything*/
+    max-height: 300px; 
+    overflow-y: auto; /*This is the scroll bar when things cant fit in the assigned space*/
+}
+
+/* Show the dropdown menu when hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* This is for mobile, we dont have a cursor on mobile so must click */
+@media (max-width: 750px) {
+    .dropdown {
+        position: static; 
+    }
+
+    /* Make dropdown menu display when clicked on mobile */
+    .dropdown-content {
+        display: none;
+    }
+
+    .dropdown.active .dropdown-content {
+        display: block;
+    }
+
+    /* Custom style for the dropdown trigger on mobile */
+    .dropdown > a {
+        cursor: pointer;
+    }
+}
+
+/* Calendar, I understand tables not allowed but thats for organizing website,
+this table is actaully a table so its ok I think */
+.calendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+    color:#0859aa
+}
+
+.calendar h2 {
+    margin-bottom: 10px;
+}
+
+.calendar-grid {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 700px; /* Adjust as needed */
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.day-name, .day {
+    width: calc(100% / 7);
+    text-align: center;
+    padding: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+}
+
+.day-name {
+    font-weight: bold;
+    background-color: #113166;
+    color: white;
+}
+
+.day {
+    min-height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    background-color: #fff;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.day:hover {
+    background-color: #143871; /* Hover effect */
+    color: white;
+    cursor: pointer;
+}
+
+/* Dark Mode Label  */
+.dark-mode-label {
+    position: static;
+    color: #0859aa;
+    top:0px;
+    right:0px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    z-index: 1;
+}
+
+.dark-mode-label input[type="checkbox"] {
+    margin-right: 10px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #ddd;
+    border-radius: 4px;
+}
+
+
+form {
+    max-width: 480px;
+    padding-top: 20px;
+}
+
+input[type="text"],
+textarea {
+    background-color: #ffffff;
+    border: 1px solid #0859aa;
+    font-size: 16px;
+    height: auto;
+    padding: 8px 18px;
+    height: 48px;
+    width: 100%;
+    color: #8a97a0;
+    margin-bottom: 16px;
+}
+
+.list {
+    margin-top:30px;
+    list-style: none;
+    
+    
+}
+
+
+/*Start of new A3 CSS. the organization is all messed up but it all should work*/
+
+/* Grade container */
+.grade-container, .all-grades-container, .grade-info {
+    background-color: var(--background-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+.grade-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px ;
+}
+.grade-table th, .grade-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ffffff;
+}
+
+.feedback-view-container,.feedback-section{
+    background-color: var(--background-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+.feedback-header{
+    color:var(--text-color);
+    font-size:large;
+    margin-top: 20px;
+}
+
+
+/* Remark Requests Table  */
+.remark-requests-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px;
+}
+
+.remark-requests-table th {
+    background-color: var(--header-bg-color);
+    padding: 12px;
+    text-align: left;
+}
+
+.remark-requests-table td {
+    padding: 12px 15px;
+    border-bottom: 1px #0859aa;
+}
+
+/*i like this, easy way to make look good*/
+
+.status-pending {
+    color: #eeff00;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: #01ff6b;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: #ff1900;
+    font-weight: bold;
+}
+
+.approve-btn, .reject-btn {
+    padding: 12px;
+    margin: 0 5px;
+    font-weight: bold;
+}
+
+
+/* No Requests Message */
+.remark-requests-table + p {
+    font-style: italic;
+    color: #7f8c8d;
+    margin: 20px;
+}
+
+
+form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+select {
+    height: auto; /* keeps select boxes normal height so it looks nice */
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background: #0066cc;
+    color: white;
+}
+
+.rp {
+    text-align: center !important; /* lol, i just looked up !important and this should probably be avoided but its fine here*/
+    margin: 15px 0 !important;
+  }

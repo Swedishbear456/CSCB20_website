@@ -1,0 +1,38 @@
+{% extends "template.html" %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Enter Student Marks</h2>
+    <form id="marks-form" method="POST" action="{{ url_for('enter_marks') }}">
+        <div class="form-group">
+            <label for="student_id">Select Student:</label>
+            <select class="form-control" id="student_id" name="student_id" required>
+                <option value="" disabled selected>Select a student</option>
+                {% for student in students %}
+                    <option value="{{ student.id }}">{{ student.username }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="assessment_type">Select Assessment:</label>
+            <select class="form-control" id="assessment_type" name="assessment_type" required>
+                <option value="" disabled selected>Select assessment type</option>
+                <option value="assignment1">Assignment 1</option>
+                <option value="assignment2">Assignment 2</option>
+                <option value="assignment3">Assignment 3</option>
+                <option value="midterm">Midterm</option>
+                <option value="lab">Lab</option>
+                <option value="final_exam">Final Exam</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="mark">Enter Mark (0-100):</label>
+            <input type="number" step="0.01" min="0" max="100" class="form-control" id="mark" name="mark" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit Mark</button>
+    </form>
+</div>
+{% endblock %}
